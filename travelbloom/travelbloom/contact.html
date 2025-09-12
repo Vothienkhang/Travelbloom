@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact – TravelBloom</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="nav"><div class="nav-inner">
+  <a class="brand" href="index.html"><span class="logo">✦</span><span>TravelBloom</span></a>
+  <nav class="nav-links">
+    <a href="index.html">Home</a><a href="about.html">About Us</a><a href="contact.html">Contact Us</a>
+  </nav>
+</div></header>
+
+<main class="hero"><div class="hero-inner">
+  <section class="card" style="max-width:720px;margin:auto">
+    <h1 class="headline">Contact Us</h1>
+    <form id="contactForm" class="search-panel" onsubmit="return submitForm(event)">
+      <input name="name" type="text" placeholder="Your name" required>
+      <input name="email" type="email" placeholder="you@example.com" required>
+      <input name="message" type="text" placeholder="Your message" required>
+      <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+    <p id="contactMsg" class="sub"></p>
+  </section>
+</div></main>
+
+<script>
+function submitForm(e){
+  e.preventDefault();
+  const form = e.target;
+  const data = Object.fromEntries(new FormData(form).entries());
+  document.getElementById('contactMsg').textContent =
+    `Thanks ${data.name}! We'll reply to ${data.email}.`;
+  form.reset();
+  return false;
+}
+</script>
+</body></html>

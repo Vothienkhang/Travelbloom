@@ -59,3 +59,29 @@ footer{opacity:.8;font-size:13px;padding:14px 20px;text-align:center}
 
 /* Focus states */
 a,button,input{outline:none} a:focus,button:focus,input:focus{box-shadow:0 0 0 3px var(--focus)}
+
+/* chips + resources */
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px }
+.chip  { font-size:12px; padding:4px 8px; border-radius:999px;
+  background:rgba(6,182,212,.15); border:1px solid rgba(6,182,212,.35) }
+.resources { margin-top:8px; display:flex; gap:10px; flex-wrap:wrap }
+.resources a { color:var(--muted); text-decoration:underline; font-size:13px }
+.resources a:hover { color:var(--text) }
+
+/* destination card with multi-photos */
+.dest-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px }
+@media (max-width:1100px){ .dest-grid{ grid-template-columns:repeat(2,1fr) } }
+@media (max-width:700px){ .dest-grid{ grid-template-columns:1fr } }
+.dest-card { border:1px solid var(--border); border-radius:16px; overflow:hidden; background:rgba(2,6,23,.45) }
+.dest-card header { padding:14px 16px; font-weight:700 }
+.dest-photos { display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px 4px 0 }
+.dest-photos img { width:100%; height:120px; object-fit:cover; border-radius:10px }
+
+/* modal schedule demo */
+.modal-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; z-index:80}
+.modal{position:fixed; inset:0; display:none; z-index:90; place-items:center}
+.modal .panel{background:#0b1224; border:1px solid var(--border); border-radius:18px; width:min(560px,92vw); padding:20px}
+.modal.show, .modal-backdrop.show{display:grid}
+.modal form .row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.modal form input, .modal form textarea{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:rgba(2,6,23,.4); color:var(--text)}
+.modal .actions{display:flex; gap:10px; justify-content:flex-end; margin-top:12px}

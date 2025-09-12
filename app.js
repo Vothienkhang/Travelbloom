@@ -3,10 +3,10 @@ const CATALOG = [
   {
     name: 'Kyoto, Japan',
     tags: ['temples','culture','asia'],
-    img: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d8?q=80&w=1200&auto=format&fit=crop',
+    img: 'https://www.neverendingvoyage.com/wp-content/uploads/2019/09/kyoto-japan-26.jpg',
     photos: [
-      'https://images.unsplash.com/photo-1545569341-9eb8b30979d8?q=80&w=1200',
-      'https://images.unsplash.com/photo-1526481280698-8fcc13fd1f52?q=80&w=1200'
+      'https://i0.wp.com/www.touristjapan.com/wp-content/uploads/2025/01/map-of-kyoto-japan-travel.jpg?resize=1024%2C683&ssl=1',
+      'https://i0.wp.com/handluggageonly.co.uk/wp-content/uploads/2017/05/iStock-509472000.jpg?fit=1600%2C1067&ssl=1'
     ],
     resources: [
       {label:'Japan-Guide Kyoto', url:'https://www.japan-guide.com/e/e2158.html'},
@@ -16,10 +16,10 @@ const CATALOG = [
   {
     name: 'Santorini, Greece',
     tags: ['islands','europe','beach'],
-    img: 'https://images.unsplash.com/photo-1504731239160-1f6fcbb4f85a?q=80&w=1200&auto=format&fit=crop',
+    img: 'https://sothebysrealty.gr/wp-content/uploads/2016/11/Santorini-sunset-at-dawn-Greece-Sothebys-International-Realty.jpg',
     photos: [
-      'https://images.unsplash.com/photo-1504731239160-1f6fcbb4f85a?q=80&w=1200',
-      'https://images.unsplash.com/photo-1507568237455-03288f3f1b8f?q=80&w=1200'
+      'https://www.royalcaribbean.com/media-assets/pmc/content/dam/shore-x/santorini-jtr/soc2-pyrgos-village-and-fira-town-with-wine-tasting/stock-photo-fira-town-volcano-sea-santorini_149799614.jpg?w=1920',
+      'https://secure.s.forbestravelguide.com/img/destinations/Santorini-CreditiStock_Maglara.jpg'
     ],
     resources: [
       {label:'Visit Greece', url:'https://www.visitgreece.gr/islands/cyclades/santorini/'},
@@ -29,10 +29,10 @@ const CATALOG = [
   {
     name: 'Marrakech, Morocco',
     tags: ['markets','africa','desert'],
-    img: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+    img: 'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/0e/eb/1b/d4.jpg',
     photos: [
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200',
-      'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200'
+      'https://b1858819.smushcdn.com/1858819/wp-content/uploads/2018/11/Marrakech-Souks-Spice-Market-Stall-scaled.jpg?lossy=2&strip=1&webp=1',
+      'https://i0.wp.com/www.worldwanderista.com/wp-content/uploads/2019/05/Marrakech-travel-guide.jpg?ssl=1'
     ],
     resources: [
       {label:'Visit Morocco', url:'https://www.visitmorocco.com/en'},
@@ -42,10 +42,10 @@ const CATALOG = [
   {
     name: 'Banff, Canada',
     tags: ['mountains','lakes','north america'],
-    img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop',
+    img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIS302cAif9HK1WYvm7MPeE-qj0Wj5LkXctg&s',
     photos: [
-      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200',
-      'https://images.unsplash.com/photo-1508261303786-0e3b16d6d38d?q=80&w=1200'
+      'https://cdn.discoverholidays.io/media/general/y/yba-istock-1368035096.webp',
+      'https://pacificnorthwestexplorer.com/wp-content/uploads/2022/12/20190813_095212-B-1024x892.jpg'
     ],
     resources: [
       {label:'Parks Canada', url:'https://parks.canada.ca/pn-np/ab/banff'},
@@ -55,10 +55,10 @@ const CATALOG = [
   {
     name: 'Hoi An, Vietnam',
     tags: ['heritage','lanterns','asia'],
-    img: 'https://images.unsplash.com/photo-1562457753-6867bda0283b?q=80&w=1200&auto=format&fit=crop',
+    img: 'https://vietnam.travel/sites/default/files/inline-images/292-Qu%E1%BA%A3ng%20Nam-tmluong50%40gmail.com-thuyen%20hoa.jpg',
     photos: [
-      'https://images.unsplash.com/photo-1562457753-6867bda0283b?q=80&w=1200',
-      'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1200'
+      'https://www.remotelands.com/travelogues/app/uploads/2024/04/How-to-Hoi-An-header.jpg',
+      'https://image.vietnam.travel/sites/default/files/2021-12/shutterstock_1506184586_resize_0.jpg?v=1757145245'
     ],
     resources: [
       {label:'Vietnam Tourism', url:'https://vietnam.travel/places-to-go/hoi-an'},
@@ -68,10 +68,10 @@ const CATALOG = [
   {
     name: 'Reykjavík, Iceland',
     tags: ['northern lights','europe','adventure'],
-    img: 'https://images.unsplash.com/photo-1500043357865-c6b8827edf39?q=80&w=1200&auto=format&fit=crop',
+    img: 'https://cdn.britannica.com/71/73371-050-9DFAEC1E/Reykjavik-Iceland.jpg',
     photos: [
-      'https://images.unsplash.com/photo-1500043357865-c6b8827edf39?q=80&w=1200',
-      'https://images.unsplash.com/photo-1527489377706-5bf97e608852?q=80&w=1200'
+      'https://res.cloudinary.com/enchanting/q_70,f_auto,w_1024,h_731,c_fit/quark-web/2024/09/Intro_Reykjavik20Cityscape_AdobeStock_208894627.jpeg',
+      'https://www.gonext.com/wp-content/uploads/2019/12/Reykjavi%CC%81k_538038355_iS_web.jpg'
     ],
     resources: [
       {label:'Visit Reykjavík', url:'https://visitreykjavik.is/'},

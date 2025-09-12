@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TravelBloom – World Map</title>
+
+  <!-- Leaflet (CDN) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    :root{
+      --bg:#0f172a; --panel:#0b1224; --text:#f8fafc; --muted:#cbd5e1;
+      --border:rgba(255,255,255,.15); --ok:#22c55e; --no:#94a3b8; --accent:#06b6d4;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,Segoe UI,Inter,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{display:grid;grid-template-columns:340px 1fr;min-height:100vh}
+    @media (max-width: 960px){ .wrap{grid-template-columns:1fr} #map{height:60vh} }
+
+    /* sidebar */
+    .side{padding:18px;border-right:1px solid var(--border);background:linear-gradient(180deg, rgba(2,6,23,.7), rgba(2,6,23,.4))}
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .logo{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:conic-gradient(from 180deg,#06b6d4,#7c3aed,#f43f5e,#06b6d4)}
+    .muted{color:var(--muted);margin:0}
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin-top:12px}
+    label{font-size:13px;color:var(--muted)}
+    input,select,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(2,6,23,.4);color:var(--text)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn{cursor:pointer;border:none;padding:10px 14px;border-radius:10px;font-weight:700}
+    .btn-primary{background:var(--accent);color:#002b33}
+    .btn-ghost{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--border)}
+    .legend{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+    .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+    .dot.ok{background:var(--ok)} .dot.no{background:var(--no)}
+    .stats{font-size:13px;color:var(--muted);margin-top:6px}
+
+    /* map */
+    #map{height:100vh}
+    .popup img{max-width:180px;border-radius:8px;display:block;margin-top:6px}
+    .chip{display:inline-block;font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">✦</div>
+        <strong>TravelBloom Map</strong>
+      </div>
+      <p class="muted">Đánh dấu quốc gia đã đi/chưa đi, đính kèm hình và ghi chú. Dữ liệu lưu cục bộ (trình duyệt).</p>
+
+      <div class="panel">
+        <div class="row">
+          <div>
+            <label>Country</label>
+            <input id="country" list="countries" placeholder="e.g., Vietnam" autocomplete="off">
+            <datalist id="countries"></datalist>
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="status">
+              <option value="visited">Đã đi</option>
+              <option value="not">Chưa đi</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label>Picture (optional)</label>
+          <input id="photo" type="file" accept="image/*">
+        </div>
+
+        <div style="margin-top:10px">
+          <label>Notes</label>
+          <textarea id="notes" rows="3" placeholder="Highlight / kỷ niệm..."></textarea>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button id="save" class="btn btn-primary">Save / Update</button>
+          <button id="pick" class="btn btn-ghost" title="Pick custom map location">Pick on map</button>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <div class="legend">
+            <span class="dot ok"></span> visited
+            <span class="dot no" style="margin-left:10px"></span> not visited
+          </div>
+          <div id="stats" class="stats"></div>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <a href="index.html" class="btn btn-ghost" style="width:100%;text-align:center">← Back to Home</a>
+        </div>
+      </div>
+    </aside>
+
+    <main id="map"></main>
+  </div>
+
+  <script>
+    // --- Minimal country centroids (extendable) ---
+    const COUNTRY_COORDS = {
+      "Vietnam":[14.0583,108.2772], "Japan":[36.2048,138.2529], "South Korea":[36.5,127.8],
+      "China":[35.8617,104.1954], "Taiwan":[23.6978,120.9605], "Thailand":[15.87,100.9925],
+      "Singapore":[1.3521,103.8198], "Malaysia":[4.2105,101.9758], "Indonesia":[-2.5489,118.0149],
+      "Philippines":[12.8797,121.7740], "Cambodia":[12.5657,104.9910], "Laos":[19.8563,102.4955],
+      "Myanmar":[21.9162,95.9560], "India":[20.5937,78.9629], "Sri Lanka":[7.8731,80.7718],
+      "Nepal":[28.3949,84.1240], "Pakistan":[30.3753,69.3451], "Bangladesh":[23.685,90.3563],
+      "UAE":[23.4241,53.8478], "Saudi Arabia":[23.8859,45.0792], "Israel":[31.0461,34.8516],
+      "Turkey":[38.9637,35.2433], "Jordan":[30.5852,36.2384],
+
+      "United States":[39.783,-100.445], "Canada":[56.1304,-106.3468], "Mexico":[23.6345,-102.5528],
+      "Brazil":[-14.235, -51.9253], "Argentina":[-38.4161,-63.6167], "Chile":[-35.6751,-71.5430],
+      "Peru":[-9.19,-75.0152], "Colombia":[4.5709,-74.2973], "Ecuador":[-1.8312,-78.1834],
+      "Costa Rica":[9.7489,-83.7534], "Cuba":[21.5218,-77.7812], "Dominican Republic":[18.7357,-70.1627],
+
+      "United Kingdom":[55.3781,-3.4360], "Ireland":[53.1424,-7.6921], "France":[46.2276,2.2137],
+      "Spain":[40.4637,-3.7492], "Portugal":[39.3999,-8.2245], "Germany":[51.1657,10.4515],
+      "Netherlands":[52.1326,5.2913], "Belgium":[50.5039,4.4699], "Switzerland":[46.8182,8.2275],
+      "Italy":[41.8719,12.5674], "Austria":[47.5162,14.5501], "Czechia":[49.8175,15.4730],
+      "Poland":[51.9194,19.1451], "Hungary":[47.1625,19.5033], "Greece":[39.0742,21.8243],
+      "Norway":[60.472,8.4689], "Sweden":[60.1282,18.6435], "Finland":[61.9241,25.7482],
+      "Denmark":[56.2639,9.5018], "Iceland":[64.9631,-19.0208], "Croatia":[45.1,15.2],
+
+      "Morocco":[31.7917,-7.0926], "Egypt":[26.8206,30.8025], "South Africa":[-30.5595,22.9375],
+      "Kenya":[-0.0236,37.9062], "Tanzania":[-6.3690,34.8888], "Ethiopia":[9.145,40.4897],
+      "Ghana":[7.9465,-1.0232], "Nigeria":[9.082,8.6753], "Tunisia":[33.8869,9.5375],
+
+      "Australia":[-25.2744,133.7751], "New Zealand":[-40.9006,174.8860], "Fiji":[-17.7134,178.0650]
+    };
+
+    // Fill datalist
+    const list = document.getElementById('countries');
+    Object.keys(COUNTRY_COORDS).sort().forEach(c=>{
+      const o=document.createElement('option'); o.value=c; list.appendChild(o);
+    });
+
+    // Map
+    const map = L.map('map',{worldCopyJump:true}).setView([20, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      maxZoom: 6, attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    const storeKey = 'travelbloom_map';
+    const db = JSON.parse(localStorage.getItem(storeKey) || '{}'); // { country: {lat,lng,status,note,img} }
+    const markers = new Map();
+
+    function badge(status){
+      return `<span class="chip" style="border-color:${status==='visited'?'#22c55e':'#94a3b8'}">${status==='visited'?'visited':'not visited'}</span>`;
+    }
+
+    function makePopup(name, entry){
+      const img = entry.img ? `<img src="${entry.img}" alt="${name} photo">` : '';
+      const note = entry.note ? `<div style="margin-top:4px;color:var(--muted)">${entry.note}</div>` : '';
+      return `<div class="popup"><strong>${name}</strong> ${badge(entry.status)}${img}${note}</div>`;
+    }
+
+    function draw(){
+      // remove old
+      markers.forEach(m => map.removeLayer(m));
+      markers.clear();
+      let visited=0, total=0;
+
+      Object.entries(db).forEach(([name, entry])=>{
+        total++;
+        if(entry.status==='visited') visited++;
+        const color = entry.status==='visited' ? '#22c55e' : '#94a3b8';
+        const m = L.circleMarker([entry.lat, entry.lng], {radius:8, color, fillColor:color, fillOpacity:0.9}).addTo(map);
+        m.bindPopup(makePopup(name,entry));
+        markers.set(name, m);
+      });
+      document.getElementById('stats').textContent = `Visited ${visited} / ${total} marked countries`;
+      localStorage.setItem(storeKey, JSON.stringify(db));
+    }
+
+    draw();
+
+    // Photo to dataURL
+    async function fileToDataURL(file){
+      if(!file) return '';
+      return new Promise(res=>{
+        const r=new FileReader();
+        r.onload=()=>res(r.result); r.readAsDataURL(file);
+      });
+    }
+
+    // Save / Update
+    const countryEl = document.getElementById('country');
+    const statusEl  = document.getElementById('status');
+    const photoEl   = document.getElementById('photo');
+    const notesEl   = document.getElementById('notes');
+
+    document.getElementById('save').addEventListener('click', async ()=>{
+      const name = (countryEl.value||'').trim();
+      if(!name){ alert('Please enter a country'); return; }
+
+      let latlng = COUNTRY_COORDS[name];
+      if(!latlng && !db[name]){ // not known and not manually set
+        alert('Country not in preset list. Click "Pick on map" then click vị trí quốc gia để lưu toạ độ.');
+        return;
+      }
+      if(!latlng && db[name]) latlng=[db[name].lat, db[name].lng];
+
+      const imgData = await fileToDataURL(photoEl.files[0]);
+      db[name] = {
+        lat: latlng[0], lng: latlng[1],
+        status: statusEl.value === 'visited' ? 'visited' : 'not',
+        note: (notesEl.value||'').trim(),
+        img: imgData || (db[name]?.img || '')
+      };
+      draw();
+      photoEl.value=''; notesEl.value='';
+      alert('Saved!');
+    });
+
+    // Pick custom location
+    let picking = false;
+    document.getElementById('pick').addEventListener('click', ()=>{
+      if(!(countryEl.value||'').trim()){ alert('Enter country name first'); return; }
+      picking = true;
+      alert('Click vị trí trên bản đồ để đặt toạ độ cho quốc gia này.');
+      map.getContainer().style.cursor='crosshair';
+    });
+
+    map.on('click', (e)=>{
+      if(!picking) return;
+      const name = (countryEl.value||'').trim();
+      db[name] = db[name] || {status:'not', note:'', img:''};
+      db[name].lat = e.latlng.lat; db[name].lng = e.latlng.lng;
+      picking = false;
+      map.getContainer().style.cursor='';
+      draw();
+      alert('Location set. Now click Save/Update to store details.');
+    });
+  </script>
+</body>
+</html>

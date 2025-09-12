@@ -19,7 +19,14 @@
         <a href="index.html">Home</a>
         <a href="about.html">About Us</a>
         <a href="contact.html">Contact Us</a>
+        <a href="map.html">Map</a>
       </nav>
+      <nav class="nav-links">
+  <a href="index.html">Home</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Contact Us</a>
+  <button id="openDemo" class="btn btn-primary" type="button" style="margin-left:8px">Schedule a Demo</button>
+</nav>
     </div>
   </header>
 
@@ -78,6 +85,10 @@
           <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200" alt="Banff National Park, Canada" class="result-img">
         </div>
       </section>
+<section class="card mt">
+  <h2>Featured Destinations (more photos & resources)</h2>
+  <div id="destGrid" class="dest-grid"></div>
+</section>
 
       <footer>
         © <span id="year"></span> TravelBloom • Explore more, worry less.
@@ -86,5 +97,28 @@
   </main>
 
   <script src="app.js"></script>
+  <div id="demoBackdrop" class="modal-backdrop"></div>
+<div id="demoModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="demoTitle">
+  <div class="panel">
+    <h2 id="demoTitle" style="margin-top:0">Schedule a Demo</h2>
+    <form id="demoForm">
+      <div class="row">
+        <input name="name" type="text" placeholder="Your name" required>
+        <input name="email" type="email" placeholder="you@example.com" required>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <input name="datetime" type="datetime-local" required>
+        <input name="timezone" type="text" placeholder="Timezone (e.g., GMT+7)" value="GMT+7">
+      </div>
+      <textarea name="notes" rows="3" placeholder="Notes (optional)" style="margin-top:10px"></textarea>
+      <div class="actions">
+        <button type="button" id="closeDemo" class="btn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Book</button>
+      </div>
+      <p id="demoMsg" class="sub" style="margin-top:8px"></p>
+    </form>
+  </div>
+</div>
+
 </body>
 </html>
